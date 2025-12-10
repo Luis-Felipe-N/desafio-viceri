@@ -1,14 +1,5 @@
-type TaskStatus = 'INICIADA' | 'BLOQUEADA' | 'CONCLUIDA'
+import type { Task } from "@/types/task"
 
-export type MockTask = {
-  id: string
-  title: string
-  owner: string
-  initials: string
-  description: string
-  due: string
-  status: TaskStatus
-}
 
 const getRelativeDateLabel = (daysOffset: number) => {
   const formatter = new Intl.DateTimeFormat('pt-BR', {
@@ -20,7 +11,7 @@ const getRelativeDateLabel = (daysOffset: number) => {
   return formatter.format(date)
 }
 
-export const MOCK_TASKS: MockTask[] = [
+export const MOCK_TASKS: Task[] = [
   {
     id: 't-01',
     title: 'Definir contrato de escopo',
