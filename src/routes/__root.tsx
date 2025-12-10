@@ -8,6 +8,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@/components/ui/sidebar'
+import { TaskProvider } from '@/context/task-content'
 
 const routeTitles: Record<
   string,
@@ -32,6 +33,7 @@ export const Route = createRootRoute({
 
     return (
       <>
+      <TaskProvider>
         <SidebarProvider>
           <AppSidebar />
           <SidebarInset>
@@ -48,6 +50,8 @@ export const Route = createRootRoute({
             </div>
           </SidebarInset>
         </SidebarProvider>
+        </TaskProvider>
+
         <TanStackDevtools
           config={{
             position: 'bottom-right',

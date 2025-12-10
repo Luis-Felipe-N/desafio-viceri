@@ -1,29 +1,29 @@
-import { MOCK_TASKS } from "@/utils/mock-data"
 import { TaskList } from "./task-list"
-
-const columns = [
-  {
-    title: 'Iniciada',
-    accent: 'from-emerald-200/70 via-emerald-100 to-transparent',
-    status: 'progress',
-    tasks: MOCK_TASKS.filter(task => task.status === 'INICIADA'),
-  },
-  {
-    title: 'Concluídas',
-    accent: 'from-sky-200/70 via-sky-100 to-transparent',
-    status: 'review',
-    tasks: MOCK_TASKS.filter(task => task.status === 'CONCLUIDA'),
-  },
-  {
-    title: 'Bloqeueadas',
-    accent: 'from-red-200/60 via-red-100 to-transparent',
-    status: 'done',
-    tasks: MOCK_TASKS.filter(task => task.status === 'BLOQUEADA'),
-  },
-]
-
+import { useTasks } from "@/context/task-content"
 
 export function TaskColumn() {
+  const { tasks } = useTasks()
+
+  const columns = [
+    {
+      title: 'Iniciada',
+      accent: 'from-emerald-200/70 via-emerald-100 to-transparent',
+      status: 'progress',
+      tasks: tasks.filter(task => task.status === 'INICIADA'),
+    },
+    {
+      title: 'Concluídas',
+      accent: 'from-sky-200/70 via-sky-100 to-transparent',
+      status: 'review',
+      tasks: tasks.filter(task => task.status === 'CONCLUIDA'),
+    },
+    {
+      title: 'Bloqeueadas',
+      accent: 'from-red-200/60 via-red-100 to-transparent',
+      status: 'done',
+      tasks: tasks.filter(task => task.status === 'BLOQUEADA'),
+    },
+  ]
   return (
     <section className="grid gap-5 xl:grid-cols-3">
         {columns.map((column) => (
