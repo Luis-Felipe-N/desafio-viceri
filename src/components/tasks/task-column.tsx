@@ -1,3 +1,4 @@
+import { Badge } from "../ui/badge"
 import { TaskList } from "./task-list"
 import { useTasks } from "@/context/task-content"
 
@@ -7,18 +8,21 @@ export function TaskColumn() {
   const columns = [
     {
       title: 'Iniciada',
+      color: 'esmerald',
       accent: 'from-emerald-200/70 via-emerald-100 to-transparent',
       status: 'progress',
       tasks: tasks.filter(task => task.status === 'INICIADA'),
     },
     {
       title: 'Concluídas',
+      color: 'sky',
       accent: 'from-sky-200/70 via-sky-100 to-transparent',
       status: 'review',
       tasks: tasks.filter(task => task.status === 'CONCLUIDA'),
     },
     {
       title: 'Bloqeueadas',
+      color: 'red',
       accent: 'from-red-200/60 via-red-100 to-transparent',
       status: 'done',
       tasks: tasks.filter(task => task.status === 'BLOQUEADA'),
@@ -33,9 +37,15 @@ export function TaskColumn() {
           >
             <div className={`bg-linear-to-br ${column.accent} absolute inset-x-4 top-4 h-16 rounded-2xl blur-3xl`} />
             <header className="relative flex items-center justify-between">
-              <div>
+              <div className="flex items-center gap-3">
                 <p className="text-sm font-semibold">{column.title}</p>
-                <span className="text-xs text-muted-foreground">{column.tasks.length} itens</span>
+                
+                 <Badge
+          className="h-5 min-w-5 rounded-full px-1 font-mono tabular-nums leading-5"
+          variant="default"
+        >
+          {column.tasks.length}
+        </Badge>
               </div>
             </header>
             <TaskList tasks={column.tasks} />
