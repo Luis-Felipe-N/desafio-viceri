@@ -1,130 +1,95 @@
-import { useState, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { Search, X } from 'lucide-react'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
-import { Badge } from '../ui/badge'
-import { useTasks } from '@/context/task-content'
-
-type FilterMode = 'all' | 'overdue' | 'iniciada' | 'concluida' | 'bloqueada'
+import { useNavigate, useSearch } from '@tanstack/react-router'
 
 export function TaskFilter() {
-  const { tasks } = useTasks()
-  const [searchTerm, setSearchTerm] = useState('')
-  const [activeFilter, setActiveFilter] = useState<FilterMode>('all')
+  const navigate = useNavigate({ from: '/tasks' })
+  const searchParams = useSearch({ from: '/tasks' }) as { query?: string; filter?: FilterMode }
+
+  const [localSearch, setLocalSearch] = useState(searchParams.query || '')
+
+  useEffect(() => {
+    setLocalSearch(searchParams.query || '')
+  }, [searchParams.query])
 
   const filterOptions: Array<{ label: string; mode: FilterMode }> = [
     { label: 'Todas', mode: 'all' },
     { label: 'Atrasadas', mode: 'overdue' },
-    { label: 'Iniciadas', mode: 'iniciada' },
-    { label: 'Concluídas', mode: 'concluida' },
-    { label: 'Bloqueadas', mode: 'bloqueada' },
+    { label: 'Iniciadas', mode: 'started' },
+    { label: 'Concluídas', mode: 'finished' },
+    { label: 'Bloqueadas', mode: 'blocked' },
   ]
 
-  const getOverdueCount = useCallback(() => {
-    const now = new Date()
-    return tasks.filter((task) => task.deadline < now && task.status !== 'CONCLUIDA').length
-  }, [tasks])
+  let timeOutSearch: any;
 
-  const getTasksByFilter = useCallback(() => {
-    let filtered = tasks
+  const handleSearchChange = (value: string) => {
+    setLocalSearch(value)
 
-    if (activeFilter === 'overdue') {
-      const now = new Date()
-      filtered = tasks.filter(
-        (task) => task.deadline < now && task.status !== 'CONCLUIDA'
-      )
-    } else if (activeFilter !== 'all') {
-      const statusMap: Record<FilterMode, string> = {
-        all: '',
-        overdue: '',
-        iniciada: 'INICIADA',
-        concluida: 'CONCLUIDA',
-        bloqueada: 'BLOQUEADA',
-      }
-      const status = statusMap[activeFilter]
-      if (status) {
-        filtered = tasks.filter((task) => task.status === status)
-      }
-    }
+    const timeoutId = setTimeout(() => {
+      navigate({
+        search: (prev) => ({
+          ...prev,
+          query: value || undefined,
+        }),
+        replace: true,
+      })
+    }, 500)
 
-    if (searchTerm.trim()) {
-      const term = searchTerm.toLowerCase()
-      filtered = filtered.filter(
-        (task) =>
-          task.title.toLowerCase().includes(term) ||
-          task.description.toLowerCase().includes(term) ||
-          task.owner.toLowerCase().includes(term)
-      )
-    }
+    return () => clearTimeout(timeoutId)
+  }
 
-    return filtered
-  }, [tasks, activeFilter, searchTerm])
+  const handleFilterChange = (mode: FilterMode) => {
+    navigate({
+      search: (prev) => ({
+        ...prev,
+        filter: mode,
+      }),
+    })
+  }
 
-  const filteredTasks = getTasksByFilter()
-  const overdueCount = getOverdueCount()
+  const activeFilter = searchParams.filter || 'all'
 
   return (
-    <div className="space-y-4">
-      <div className="border-b pb-4">
-        <form className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-          <div className="grid gap-2 w-full md:max-w-xl">
-            <label htmlFor="search" className="text-sm font-medium">
-              Buscar
-            </label>
-            <div className="relative">
-              <Search className="absolute left-4 top-3.5 size-4 text-muted-foreground" />
-              <Input
-                id="search"
-                placeholder="Pesquisar por título, descrição ou responsável..."
-                className="pl-11"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              {searchTerm && (
-                <button
-                  type="button"
-                  className="absolute right-3 top-3 text-muted-foreground hover:text-foreground"
-                  onClick={() => setSearchTerm('')}
-                >
-                  <X className="size-4" />
-                </button>
-              )}
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-muted-foreground">
-              {filteredTasks.length} resultado{filteredTasks.length !== 1 ? 's' : ''}
-            </span>
-          </div>
-        </form>
-      </div>
-
-      <div className="flex flex-wrap gap-2">
-        {filterOptions.map((option) => {
-          const isActive = activeFilter === option.mode
-          const count = option.mode === 'overdue' ? overdueCount : null
-
-          return (
-            <Button
-              key={option.mode}
-              variant={isActive ? 'default' : 'outline'}
-              size="sm"
-              className="relative"
-              onClick={() => setActiveFilter(option.mode)}
+    <div className="space-y-4 mb-8">
+      <div className="flex flex-col gap-4">
+        <div className="relative w-full md:max-w-xl">
+          <Search className="absolute left-3 top-4 size-4 text-muted-foreground" />
+          <Input
+            placeholder="Pesquisar por título, descrição ou responsável..."
+            className="pl-9 pr-9"
+            value={localSearch}
+            onChange={(e) => handleSearchChange(e.target.value)}
+          />
+          {localSearch && (
+            <button
+              type="button"
+              className="absolute right-3 top-4 text-muted-foreground hover:text-foreground"
+              onClick={() => handleSearchChange('')}
             >
-              {option.label}
-              {count !== null && count > 0 && (
-                <Badge
-                  variant="secondary"
-                  className="absolute -top-2 -right-2 size-5 p-0 flex items-center justify-center text-xs"
-                >
-                  {count}
-                </Badge>
-              )}
-            </Button>
-          )
-        })}
+              <X className="size-4" />
+            </button>
+          )}
+        </div>
+
+        <div className="flex flex-wrap gap-2">
+          {filterOptions.map((option) => {
+            const isActive = activeFilter === option.mode
+
+            return (
+              <Button
+                key={option.mode}
+                variant={isActive ? 'default' : 'outline'}
+                size="sm"
+                className="relative h-8"
+                onClick={() => handleFilterChange(option.mode)}
+              >
+                {option.label}
+              </Button>
+            )
+          })}
+        </div>
       </div>
     </div>
   )

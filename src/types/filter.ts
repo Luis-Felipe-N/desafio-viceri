@@ -1,0 +1,1 @@
+type FilterMode = 'all' | 'overdue' | 'started' | 'finished' | 'blocked'
