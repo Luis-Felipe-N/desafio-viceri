@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { TaskColumn } from '@/components/tasks/task-column'
 import { CreateTaskDialog } from '@/components/feature/create-task'
+import { TaskFilter } from '@/components/tasks/task-filter'
 
 export const Route = createFileRoute('/tasks')({
   component: TasksPage,
@@ -21,6 +22,8 @@ function TasksPage() {
         </div>
         <CreateTaskDialog />
       </div>
+
+      <TaskFilter />
 
       <TaskColumn />
     </div>
