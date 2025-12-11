@@ -1,7 +1,7 @@
 # Principal
-  - Excluir tarefa;
-  - Alterar tarefa;
-  - Listagem de todas as tarefas;
+  [x] Excluir tarefa;
+  [x] Alterar tarefa;
+  [x] Listagem de todas as tarefas;
   - Filtragem das tarefas
   - Mover a tarefa de status
 
