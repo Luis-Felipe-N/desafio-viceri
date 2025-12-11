@@ -2,32 +2,17 @@ import { Link, useRouterState } from '@tanstack/react-router'
 import type { LucideIcon } from 'lucide-react'
 import { Check, Home } from 'lucide-react'
 
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuBadge,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarRail,
-} from '@/components/ui/sidebar'
+import { cn } from '@/lib/utils'
 
 const workspace = {
   name: 'Luis Felipe',
-  squad: 'Frontend'
+  squad: 'Frontend',
 }
 
 type NavItem = {
   title: string
   icon: LucideIcon
-  to?: string
-  href?: string
-  badge?: string
+  to: string
 }
 
 const navigation: NavItem[] = [
@@ -43,79 +28,53 @@ const navigation: NavItem[] = [
   },
 ]
 
-export function AppSidebar() {
+export function AppNavbar() {
   const pathname = useRouterState({
     select: (state) => state.location.pathname,
   })
 
   return (
-    <Sidebar collapsible="icon">
-      <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
-              <Link to="/" className="flex items-center gap-2">
-                <div className="bg-sidebar-primary text-sidebar-primary-foreground flex size-8 items-center justify-center rounded-lg font-semibold">
-                  LF
-                </div>
-                <div className="flex flex-col leading-tight">
-                  <span className="text-sm font-semibold">{workspace.name}</span>
-                  <span className="text-xs text-sidebar-foreground/70">{workspace.squad}</span>
-                </div>
+    <nav className="sticky top-0 z-40 border-b border-border/60 bg-card/80 backdrop-blur">
+      <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 sm:px-6">
+        <Link to="/" className="flex items-center gap-3">
+          <div className="bg-primary/10 text-primary flex size-10 items-center justify-center rounded-lg font-semibold">
+            LF
+          </div>
+          <div>
+            <p className="text-sm font-semibold leading-tight">{workspace.name}</p>
+            <span className="text-xs text-muted-foreground">{workspace.squad}</span>
+          </div>
+        </Link>
+
+        <div className="hidden md:flex items-center gap-6">
+          {navigation.map((item) => {
+            const isActive = pathname === item.to
+            return (
+              <Link
+                key={item.title}
+                to={item.to}
+                className={cn(
+                  'inline-flex items-center gap-2 text-sm font-medium transition-colors hover:text-foreground/80',
+                  isActive ? 'text-foreground' : 'text-muted-foreground'
+                )}
+              >
+                <item.icon className="size-4" />
+                {item.title}
               </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarHeader>
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Menu</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {navigation.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  {item.to ? (
-                    <SidebarMenuButton asChild isActive={pathname === item.to}>
-                      <Link to={item.to} className="flex items-center gap-2">
-                        <item.icon className="size-4" />
-                        <span>{item.title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  ) : (
-                    <SidebarMenuButton asChild>
-                      <a href={item.href ?? '#'} className="flex items-center gap-2">
-                        <item.icon className="size-4" />
-                        <span>{item.title}</span>
-                      </a>
-                    </SidebarMenuButton>
-                  )}
-                  {item.badge ? (
-                    <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>
-                  ) : null}
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-      <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <a href="#profile" className="flex items-center gap-2">
-                <div className="bg-sidebar-primary/10 text-sidebar-primary flex size-8 items-center justify-center rounded-full font-semibold">
-                  LN
-                </div>
-                <div className="flex flex-col leading-tight">
-                  <span className="text-sm font-medium">Luis Nunes</span>
-                  <span className="text-xs text-sidebar-foreground/70">Frontend Trainee</span>
-                </div>
-              </a>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
-      <SidebarRail />
-    </Sidebar>
+            )
+          })}
+        </div>
+
+        <div className="flex items-center gap-3 text-sm">
+          <div className="text-right">
+            <p className="font-medium">Luis Nunes</p>
+            <span className="text-xs text-muted-foreground">Frontend Trainee</span>
+          </div>
+          <div className="bg-muted flex size-10 items-center justify-center rounded-full text-sm font-semibold">
+            LN
+          </div>
+        </div>
+      </div>
+    </nav>
   )
 }

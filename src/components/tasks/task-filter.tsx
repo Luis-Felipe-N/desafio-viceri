@@ -3,6 +3,7 @@ import { Search, X } from 'lucide-react'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { useNavigate, useSearch } from '@tanstack/react-router'
+import { cn } from '@/lib/utils'
 
 export function TaskFilter() {
   const navigate = useNavigate({ from: '/tasks' })
@@ -52,13 +53,16 @@ export function TaskFilter() {
   const activeFilter = searchParams.filter || 'all'
 
   return (
-    <div className="space-y-4 mb-8">
+    <div className="space-y-4 mb-12">
       <div className="flex flex-col gap-4">
         <div className="relative w-full md:max-w-xl">
-          <Search className="absolute left-3 top-4 size-4 text-muted-foreground" />
+          <Search className="absolute left-3 top-4 size-4 z-20" color='#FFF' />
           <Input
             placeholder="Pesquisar por título, descrição ou responsável..."
-            className="pl-9 pr-9"
+            className={cn(
+              "pl-9 pr-9 bg-viceri-blue/10 backdrop-blur-lg text-white font-bold placeholder:text-white border-white/40 shadow-none",
+              "focus-visible:border-white/40 focus-visible:ring-white/20 focus-visible:ring-[3px]",
+            )}
             value={localSearch}
             onChange={(e) => handleSearchChange(e.target.value)}
           />
@@ -68,7 +72,7 @@ export function TaskFilter() {
               className="absolute right-3 top-4 text-muted-foreground hover:text-foreground"
               onClick={() => handleSearchChange('')}
             >
-              <X className="size-4" />
+              <X className="size-4" color='#FFF' />
             </button>
           )}
         </div>
@@ -82,7 +86,12 @@ export function TaskFilter() {
                 key={option.mode}
                 variant={isActive ? 'default' : 'outline'}
                 size="sm"
-                className="relative h-8"
+                className={cn(
+                  "cursor-pointer relative h-8 font-bold text-white",
+                  isActive
+                    ? 'bg-viceri-orange'
+                    : 'bg-viceri-blue/10 backdrop-blur-lg border-white/40 hover:text-white hover:bg-viceri-blue/30 hover:border-white/60',
+                )}
                 onClick={() => handleFilterChange(option.mode)}
               >
                 {option.label}

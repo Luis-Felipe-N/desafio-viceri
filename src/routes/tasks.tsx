@@ -20,10 +20,9 @@ function TasksPage() {
     <div className="space-y-8">
       <div className='flex justify-between'>
         <div>
-          <h1 className="mt-1 text-3xl font-semibold">Pipeline de tarefas</h1>
-          <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-            Visão consolidada do que está em descoberta, execução ou aguardando validação. As tasks críticas
-            aparecem primeiro para manter o foco do time nas entregas com maior impacto.
+          <h1 className="mt-1 text-3xl font-semibold text-viceri-blue">Tasks</h1>
+          <p className="mt-2 max-w-2xl text-sm text-viceri-blue/80">
+            Board para gerenciar suas tarefas de forma eficiente.
           </p>
         </div>
         <CreateTaskDialog />

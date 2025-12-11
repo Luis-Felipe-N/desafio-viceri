@@ -1,8 +1,9 @@
 import type { Task } from "@/types/task"
-import { Calendar } from "lucide-react"
+import { Badge as BadgeIcon, Calendar } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { DeleteTaskDialog } from "../feature/delete-task"
 import { EditTaskDialog } from "../feature/edit-task-dialog"
+import { Badge } from "../ui/badge"
 
 interface TaskCardProps {
   task: Task
@@ -17,22 +18,21 @@ export function TaskCard({ task }: TaskCardProps) {
   const formattedDeadline = deadlineFormatter.format(task.deadline)
 
   return (
-    <div className="border-border/60 rounded-2xl border p-4">
+    <div className="rounded-2xl p-4 bg-card">
       <div className="flex items-start justify-between gap-4">
         <div className="w-full">
           <div className="flex items-center justify-between">
-            <p className="leading-tight font-bold">{task.title}</p>
+            <Badge className="bg-viceri-blue">Frontend</Badge>
             <div className="flex items-center gap-2">
               <EditTaskDialog task={task} />
               <DeleteTaskDialog id={task.id} />
             </div>
           </div>
-          <p className="my-1 text-xs text-muted-foreground/90">{task.description}</p>
+          <p className="leading-tight font-bold text-viceri-blue">{task.title}</p>
+          <p className="my-1 text-xs text-viceri-muted-blue/80">{task.description}</p>
         </div>
       </div>
-      <div>
-        <small className="text-accent-foreground/70"><strong>Squard: </strong>Frontend</small>
-      </div>
+
       <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
         <div className="*:data-[slot=avatar]:ring-background flex -space-x-2 *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:grayscale">
           <Avatar>
@@ -55,7 +55,7 @@ export function TaskCard({ task }: TaskCardProps) {
           </Avatar>
         </div>
 
-        <span className="inline-flex items-center gap-2">
+        <span className="inline-flex items-center gap-2 text-viceri-muted-blue/80">
           <Calendar className="size-3.5" /> {formattedDeadline}
         </span>
       </div>

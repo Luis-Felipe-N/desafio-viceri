@@ -61,22 +61,20 @@ export function TaskColumn() {
     },
   ]
 
-
-
   return (
     <section className="grid gap-5 xl:grid-cols-3">
       {columns.map((column) => (
         <article
           key={column.title}
-          className="border-border/60 bg-card text-card-foreground relative flex h-full flex-col rounded-2xl border p-4"
+          className="border-border/60 text-card-foreground relative flex h-full flex-col"
         >
           <div className={`bg-linear-to-br ${column.accent} absolute inset-x-4 top-4 h-16 rounded-2xl blur-3xl`} />
-          <header className="relative flex items-center justify-between">
+          <header className="relative flex items-center justify-between  rounded-2xl p-4 bg-card">
             <div className="flex items-center gap-3">
-              <p className="text-sm font-semibold">{column.title}</p>
+              <p className="text-sm font-semibold text-viceri-blue">{column.title}</p>
 
               <Badge
-                className="h-5 min-w-5 rounded-full px-1 font-mono tabular-nums leading-5"
+                className="h-5 min-w-5 rounded-full px-1 font-mono tabular-nums leading-5 bg-viceri-blue"
                 variant="default"
               >
                 {column.tasks.length}

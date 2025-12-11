@@ -2,12 +2,7 @@ import { Outlet, createRootRoute, useRouterState } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 
-import { AppSidebar } from '@/components/app-sidebar'
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from '@/components/ui/sidebar'
+import { AppNavbar } from '@/components/app-navbar'
 import { TaskProvider } from '@/context/task-content'
 
 const routeTitles: Record<
@@ -33,23 +28,19 @@ export const Route = createRootRoute({
 
     return (
       <>
-      <TaskProvider>
-        <SidebarProvider>
-          <AppSidebar />
-          <SidebarInset>
-            <header className="flex h-16 shrink-0 items-center gap-4 border-b px-6">
-              <SidebarTrigger className="-ml-1" />
-              <div className="flex flex-col">
-                <span className="text-xs uppercase tracking-wide text-muted-foreground">
-                  {current.label}
-                </span>
-              </div>
-            </header>
-            <div className="flex flex-1 flex-col gap-6 p-6">
-              <Outlet />
+
+        <TaskProvider>
+          <div className="relative min-h-screen bg-background">
+            <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-viceri-blue/30 via-viceri-orange/10 to-transparent blur-3xl" />
+            <div className="relative z-10">
+              <AppNavbar />
+              <main className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+                <div className="flex flex-1 flex-col gap-6">
+                  <Outlet />
+                </div>
+              </main>
             </div>
-          </SidebarInset>
-        </SidebarProvider>
+          </div>
         </TaskProvider>
 
         <TanStackDevtools

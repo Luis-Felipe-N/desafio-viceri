@@ -27,7 +27,7 @@ export function DeleteTaskDialog({ id }: DeleteTaskDialogProps) {
           size="icon"
           className="text-muted-foreground hover:text-destructive hover:bg-destructive/10"
         >
-          <Trash2 className="size-4" />
+          <Trash2 className="size-4 text-red-400" />
           <span className="sr-only">Deletar tarefa</span>
         </Button>
       </DialogTrigger>

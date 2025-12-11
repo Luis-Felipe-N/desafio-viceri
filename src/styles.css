@@ -55,6 +55,8 @@ code {
   --color-sidebar-ring: var(--sidebar-ring);
 
   --color-viceri-orange: var(--viceri-orange);
+  --color-viceri-blue: var(--viceri-blue);
+  --color-viceri-muted-blue: var(--viceri-muted-blue);
 }
 
 :root {
@@ -92,6 +94,8 @@ code {
   --sidebar-ring: oklch(0.708 0 0);
 
   --viceri-orange: #FF4438;
+  --viceri-blue: #1B2668;
+  --viceri-muted-blue: #2c3774ff;
 }
 
 .dark {
@@ -128,6 +132,8 @@ code {
   --sidebar-ring: oklch(0.556 0 0);
 
   --viceri-orange: #FF4438;
+  --viceri-blue: #1B2668;
+  --viceri-muted-blue: #2c3774ff;
 }
 
 @layer base {

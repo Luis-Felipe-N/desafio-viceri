@@ -71,7 +71,7 @@ export function EditTaskDialog({ task }: EditTaskFormDialogProps) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-muted">
-          <Pencil className="size-4 text-muted-foreground" />
+          <Pencil className="size-4 text-viceri-blue" />
           <span className="sr-only">Editar</span>
         </Button>
       </DialogTrigger>
