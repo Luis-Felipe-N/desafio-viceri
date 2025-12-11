@@ -2,7 +2,7 @@
   [x] Excluir tarefa;
   [x] Alterar tarefa;
   [x] Listagem de todas as tarefas;
-  - Filtragem das tarefas
+  [x] Filtragem das tarefas
   - Mover a tarefa de status
 
 # Segunda etapa
