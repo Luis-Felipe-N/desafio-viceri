@@ -1,22 +1,29 @@
 import type { Task } from "@/types/task"
-import { Calendar, Ellipsis } from "lucide-react"
+import { Calendar } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
-import { Button } from "../ui/button"
-import { TaskDropdownMenu } from "./task-dropdown-menu"
 import { DeleteTaskDialog } from "../feature/delete-task"
+import { EditTaskDialog } from "../feature/edit-task-dialog"
 
 interface TaskCardProps {
   task: Task
 }
 
+const deadlineFormatter = new Intl.DateTimeFormat("pt-BR", {
+  day: "2-digit",
+  month: "short",
+})
+
 export function TaskCard({ task }: TaskCardProps) {
+  const formattedDeadline = deadlineFormatter.format(task.deadline)
+
   return (
-    <div key={task.title} className="border-border/60 rounded-2xl border p-4">
+    <div className="border-border/60 rounded-2xl border p-4">
       <div className="flex items-start justify-between gap-4">
         <div className="w-full">
           <div className="flex items-center justify-between">
             <p className="leading-tight font-bold">{task.title}</p>
-            <div>
+            <div className="flex items-center gap-2">
+              <EditTaskDialog task={task} />
               <DeleteTaskDialog id={task.id} />
             </div>
           </div>
@@ -49,7 +56,7 @@ export function TaskCard({ task }: TaskCardProps) {
         </div>
 
         <span className="inline-flex items-center gap-2">
-          <Calendar className="size-3.5" /> {task.due}
+          <Calendar className="size-3.5" /> {formattedDeadline}
         </span>
       </div>
     </div>

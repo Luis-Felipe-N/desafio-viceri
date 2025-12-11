@@ -22,7 +22,6 @@ export function DeleteTaskDialog({ id }: DeleteTaskDialogProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        {/* Botão mais discreto, só mostra o ícone */}
         <Button
           variant="ghost"
           size="icon"
@@ -33,8 +32,9 @@ export function DeleteTaskDialog({ id }: DeleteTaskDialogProps) {
         </Button>
       </DialogTrigger>
 
-      <DialogContent>
-        <DialogHeader>
+      <DialogContent className="overflow-hidden">
+        <DialogHeader className="relative">
+          <div className={`bg-linear-to-br from-red-400/70 via-red-100 absolute to-transparent inset-x-4 top-4 h-16 rounded-2xl blur-3xl`} />
           <DialogTitle>Excluir tarefa?</DialogTitle>
           <DialogDescription>
             Essa ação não pode ser desfeita. Isso excluirá permanentemente a tarefa do quadro.

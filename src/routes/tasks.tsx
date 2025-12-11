@@ -1,6 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
 
-import { MOCK_TASKS } from '@/utils/mock-data'
 import { TaskColumn } from '@/components/tasks/task-column'
 import { CreateTaskDialog } from '@/components/feature/create-task'
 

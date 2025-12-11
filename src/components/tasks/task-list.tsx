@@ -1,6 +1,5 @@
-import type { Task } from "@/types/task";
-import { Calendar } from "lucide-react";
-import { TaskCard } from "./task-card";
+import type { Task } from "@/types/task"
+import { TaskCard } from "./task-card"
 
 interface TaskListProps {
   tasks: Task[]

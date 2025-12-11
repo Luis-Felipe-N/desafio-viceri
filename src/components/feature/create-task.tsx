@@ -22,7 +22,7 @@ import { z } from "zod"
 const createTaskSchema = z.object({
   title: z.string().min(3, "O título deve ter pelo menos 3 caracteres"),
   owner: z.string().min(2, "Informe o nome do responsável"),
-  due: z.string().refine((val) => !Number.isNaN(Date.parse(val)), {
+  deadline: z.string().refine((value) => !Number.isNaN(Date.parse(value)), {
     message: "Data inválida",
   }),
   description: z.string().min(5, "A descrição deve ser mais detalhada"),
@@ -39,18 +39,18 @@ export function CreateTaskDialog() {
   )
 
   const handleCreateTask = (data: CreateTaskFormData) => {
-    const formattedDate = new Date(data.due).toLocaleDateString("pt-BR", {
-      day: "2-digit",
-      month: "short",
-    })
+    const deadline = new Date(data.deadline)
 
     createTask({
       title: data.title,
       description: data.description,
       owner: data.owner,
-      due: formattedDate,
+      deadline,
       status: "INICIADA" as TaskStatus,
     })
+
+    reset()
+    setOpen(false)
   }
 
 
@@ -64,7 +64,8 @@ export function CreateTaskDialog() {
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
+        <DialogHeader className="relative">
+          <div className={`bg-linear-to-br from-green-400/70 via-green-100 absolute to-transparent inset-x-4 top-4 h-16 rounded-2xl blur-3xl`} />
           <DialogTitle>Criar nova tarefa</DialogTitle>
           <DialogDescription>
             Preencha os detalhes da atividade para adicionar ao quadro.
@@ -103,20 +104,20 @@ export function CreateTaskDialog() {
           </div>
 
           <div className="grid gap-2">
-            <label htmlFor="due" className="text-sm font-medium">
+            <label htmlFor="deadline" className="text-sm font-medium">
               Prazo de Entrega
             </label>
             <div className="relative">
               <CalendarIcon className="absolute left-4 top-4 size-4 text-muted-foreground" />
               <Input
-                id="due"
+                id="deadline"
                 type="date"
                 className="pl-11"
-                {...register("due")}
+                {...register("deadline")}
               />
             </div>
-            {errors.due && (
-              <span className="text-xs text-destructive">{errors.due.message}</span>
+            {errors.deadline && (
+              <span className="text-xs text-destructive">{errors.deadline.message}</span>
             )}
           </div>
 
@@ -126,7 +127,7 @@ export function CreateTaskDialog() {
             </label>
             <textarea
               id="description"
-              className="flex min-h-[80px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex min-h-20 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
               placeholder="Detalhes técnicos da tarefa..."
               {...register("description")}
             />

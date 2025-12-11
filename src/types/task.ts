@@ -5,6 +5,6 @@ export type Task = {
   title: string
   owner: string
   description: string
-  due: string
+  deadline: Date
   status: TaskStatus
 }
