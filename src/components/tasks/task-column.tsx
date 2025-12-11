@@ -14,7 +14,7 @@ export function TaskColumn() {
       const matchesSearch =
         task.title.toLowerCase().includes(term) ||
         task.description.toLowerCase().includes(term) ||
-        task.owner.toLowerCase().includes(term)
+        task.owner.name.toLowerCase().includes(term)
 
       if (!matchesSearch) return false
     }

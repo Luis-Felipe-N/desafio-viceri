@@ -16,13 +16,16 @@ const deadlineFormatter = new Intl.DateTimeFormat("pt-BR", {
 
 export function TaskCard({ task }: TaskCardProps) {
   const formattedDeadline = deadlineFormatter.format(task.deadline)
+  const participants = [task.owner, ...(task.participants || [])]
+
+  console.log("TaskCard", task)
 
   return (
     <div className="rounded-2xl p-4 bg-card">
       <div className="flex items-start justify-between gap-4">
         <div className="w-full">
           <div className="flex items-center justify-between">
-            <Badge className="bg-viceri-blue">Frontend</Badge>
+            <Badge className="bg-viceri-blue">{task.owner.squard}</Badge>
             <div className="flex items-center gap-2">
               <EditTaskDialog task={task} />
               <DeleteTaskDialog id={task.id} />
@@ -35,24 +38,14 @@ export function TaskCard({ task }: TaskCardProps) {
 
       <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
         <div className="*:data-[slot=avatar]:ring-background flex -space-x-2 *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:grayscale">
-          <Avatar>
-            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
-          <Avatar>
-            <AvatarImage
-              src="https://github.com/maxleiter.png"
-              alt="@maxleiter"
-            />
-            <AvatarFallback>LR</AvatarFallback>
-          </Avatar>
-          <Avatar>
-            <AvatarImage
-              src="https://github.com/evilrabbit.png"
-              alt="@evilrabbit"
-            />
-            <AvatarFallback>ER</AvatarFallback>
-          </Avatar>
+          {participants.map((participant) => (
+            <Avatar key={participant.id} className="size-6">
+              <AvatarImage src={participant.imageUrl} />
+              <AvatarFallback className="bg-viceri-blue text-xs font-semibold">
+                {participant.name[0]}
+              </AvatarFallback>
+            </Avatar>
+          ))}
         </div>
 
         <span className="inline-flex items-center gap-2 text-viceri-muted-blue/80">

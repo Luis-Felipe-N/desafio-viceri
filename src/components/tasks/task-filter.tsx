@@ -60,7 +60,7 @@ export function TaskFilter() {
           <Input
             placeholder="Pesquisar por título, descrição ou responsável..."
             className={cn(
-              "pl-9 pr-9 bg-viceri-blue/10 backdrop-blur-lg text-white font-bold placeholder:text-white border-white/40 shadow-none",
+              "pl-9 pr-9 bg-viceri-blue/30 backdrop-blur-lg text-white font-bold placeholder:text-white border-white/40 shadow-none",
               "focus-visible:border-white/40 focus-visible:ring-white/20 focus-visible:ring-[3px]",
             )}
             value={localSearch}
@@ -90,7 +90,7 @@ export function TaskFilter() {
                   "cursor-pointer relative h-8 font-bold text-white",
                   isActive
                     ? 'bg-viceri-orange'
-                    : 'bg-viceri-blue/10 backdrop-blur-lg border-white/40 hover:text-white hover:bg-viceri-blue/30 hover:border-white/60',
+                    : 'bg-viceri-blue/30 backdrop-blur-lg border-white/40 hover:text-white hover:bg-viceri-blue/40 hover:border-white/60',
                 )}
                 onClick={() => handleFilterChange(option.mode)}
               >

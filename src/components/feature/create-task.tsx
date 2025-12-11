@@ -18,10 +18,11 @@ import type { TaskStatus } from "@/types/task"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
+import { MOCK_USERS } from "@/utils/mock-user"
 
 const createTaskSchema = z.object({
   title: z.string().min(3, "O título deve ter pelo menos 3 caracteres"),
-  owner: z.string().min(2, "Informe o nome do responsável"),
+  participantIds: z.array(z.string()).optional(),
   deadline: z.string().refine((value) => !Number.isNaN(Date.parse(value)), {
     message: "Data inválida",
   }),
@@ -44,7 +45,9 @@ export function CreateTaskDialog() {
     createTask({
       title: data.title,
       description: data.description,
-      owner: data.owner,
+      participants: [MOCK_USERS[0]],
+      owner: MOCK_USERS[0],
+      createdAt: new Date(),
       deadline,
       status: "INICIADA" as TaskStatus,
     })
@@ -64,8 +67,7 @@ export function CreateTaskDialog() {
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader className="relative">
-          <div className={`bg-linear-to-br from-green-400/70 via-green-100 absolute to-transparent inset-x-4 top-4 h-16 rounded-2xl blur-3xl`} />
+        <DialogHeader>
           <DialogTitle>Criar nova tarefa</DialogTitle>
           <DialogDescription>
             Preencha os detalhes da atividade para adicionar ao quadro.
@@ -83,23 +85,6 @@ export function CreateTaskDialog() {
             />
             {errors.title && (
               <span className="text-xs text-destructive">{errors.title.message}</span>
-            )}
-          </div>
-          <div className="grid gap-2">
-            <label htmlFor="owner" className="text-sm font-medium">
-              Responsável
-            </label>
-            <div className="relative">
-              <User className="absolute left-4 top-4 size-4 text-muted-foreground" />
-              <Input
-                id="owner"
-                placeholder="Nome do Dev"
-                className="pl-11"
-                {...register("owner")}
-              />
-            </div>
-            {errors.owner && (
-              <span className="text-xs text-destructive">{errors.owner.message}</span>
             )}
           </div>
 

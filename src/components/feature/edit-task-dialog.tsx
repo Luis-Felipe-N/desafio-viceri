@@ -17,7 +17,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useTasks } from "@/context/task-content"
-import type { Task, TaskStatus } from "@/types/task" // Importe o tipo Task
+import type { Task, TaskStatus } from "@/types/task"
 
 const editTaskSchema = z.object({
   title: z.string().min(3, "O título deve ter pelo menos 3 caracteres"),
