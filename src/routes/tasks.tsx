@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { MOCK_TASKS } from '@/utils/mock-data'
 import { TaskColumn } from '@/components/tasks/task-column'
+import { CreateTaskDialog } from '@/components/feature/create-task'
 
 export const Route = createFileRoute('/tasks')({
   component: TasksPage,
@@ -11,11 +12,17 @@ export const Route = createFileRoute('/tasks')({
 function TasksPage() {
   return (
     <div className="space-y-8">
-      <h1 className="mt-1 text-3xl font-semibold">Pipeline de tarefas</h1>
-      <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-        Visão consolidada do que está em descoberta, execução ou aguardando validação. As tasks críticas
-        aparecem primeiro para manter o foco do time nas entregas com maior impacto.
-      </p>
+      <div className='flex justify-between'>
+        <div>
+          <h1 className="mt-1 text-3xl font-semibold">Pipeline de tarefas</h1>
+          <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+            Visão consolidada do que está em descoberta, execução ou aguardando validação. As tasks críticas
+            aparecem primeiro para manter o foco do time nas entregas com maior impacto.
+          </p>
+        </div>
+        <CreateTaskDialog />
+      </div>
+
       <TaskColumn />
     </div>
   )

@@ -15,16 +15,16 @@ export function TaskCard({ task }: TaskCardProps) {
       <div className="flex items-start justify-between gap-4">
         <div className="w-full">
           <div className="flex items-center justify-between">
-            <p className="font-medium leading-tight">{task.title}</p>
+            <p className="leading-tight font-bold">{task.title}</p>
             <div>
               <DeleteTaskDialog id={task.id} />
             </div>
           </div>
-          <p className="mt-2 text-xs text-muted-foreground/80">{task.description}</p>
+          <p className="my-1 text-xs text-muted-foreground/90">{task.description}</p>
         </div>
       </div>
       <div>
-        <strong>Squard: </strong> <small>Frontend</small>
+        <small className="text-accent-foreground/70"><strong>Squard: </strong>Frontend</small>
       </div>
       <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
         <div className="*:data-[slot=avatar]:ring-background flex -space-x-2 *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:grayscale">
