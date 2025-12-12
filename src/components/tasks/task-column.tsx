@@ -1,4 +1,4 @@
-import { DndContext, type DragEndEvent, DragOverlay, useSensor, useSensors, PointerSensor, TouchSensor } from "@dnd-kit/core"
+import { DndContext, type DragEndEvent, useSensor, useSensors, PointerSensor, TouchSensor } from "@dnd-kit/core"
 import { useSearch } from "@tanstack/react-router"
 import { Badge } from "../ui/badge"
 import { TaskList } from "./task-list"

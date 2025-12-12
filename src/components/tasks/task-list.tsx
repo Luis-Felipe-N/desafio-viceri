@@ -1,5 +1,4 @@
 import type { Task } from "@/types/task"
-import { TaskCard } from "./task-card"
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { DraggableCard } from "./droppable/draggable-card"
 

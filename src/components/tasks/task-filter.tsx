@@ -19,8 +19,6 @@ export function TaskFilter() {
     { label: 'Bloqueadas', mode: 'bloqued' },
   ]
 
-  let timeOutSearch: any;
-
   const handleSearchChange = (value: string) => {
     setLocalSearch(value)
 

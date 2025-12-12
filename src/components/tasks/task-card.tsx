@@ -1,5 +1,5 @@
 import type { Task } from "@/types/task"
-import { Badge as BadgeIcon, Calendar } from "lucide-react"
+import { Calendar } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { DeleteTaskDialog } from "../feature/delete-task"
 import { EditTaskDialog } from "../feature/edit-task-dialog"

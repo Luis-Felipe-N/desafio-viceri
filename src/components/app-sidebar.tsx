@@ -31,7 +31,7 @@ export function AppNavbar() {
   return (
     <nav className="sticky top-0 z-40 border-b border-border/60 bg-card/80 backdrop-blur">
       <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 sm:px-6">
-        <Link to="/" className="flex items-center gap-3">
+        <Link to="/" search={{ filter: 'all' }} className="flex items-center gap-3">
           <div className="bg-primary/10 text-primary flex size-10 items-center justify-center rounded-lg font-semibold">
             LF
           </div>
@@ -48,6 +48,7 @@ export function AppNavbar() {
               <Link
                 key={item.title}
                 to={item.to}
+                search={{ filter: 'all' }}
                 className={cn(
                   'inline-flex items-center gap-2 text-sm font-medium transition-colors hover:text-foreground/80',
                   isActive ? 'text-foreground' : 'text-muted-foreground'
