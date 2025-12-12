@@ -2,7 +2,7 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
-import { PlusCircle, Calendar as CalendarIcon, User, Pencil } from "lucide-react"
+import { Calendar as CalendarIcon, Pencil } from "lucide-react"
 
 import {
   Dialog,
@@ -17,11 +17,12 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useTasks } from "@/context/task-content"
-import type { Task, TaskStatus } from "@/types/task"
+import type { Task } from "@/types/task"
+import { MOCK_USERS } from "@/utils/mock-user"
 
 const editTaskSchema = z.object({
   title: z.string().min(3, "O título deve ter pelo menos 3 caracteres"),
-  owner: z.string().min(2, "Informe o nome do responsável"),
+  participantIds: z.array(z.string()).optional(),
   deadline: z.string().refine((val) => !Number.isNaN(Date.parse(val)), {
     message: "Data inválida",
   }),
@@ -47,7 +48,7 @@ export function EditTaskDialog({ task }: EditTaskFormDialogProps) {
     resolver: zodResolver(editTaskSchema),
     values: {
       title: task.title,
-      owner: task.owner,
+      participantIds: task.participants?.map((participant) => participant.id) ?? [],
       deadline: new Date(task.deadline).toISOString().split("T")[0],
       description: task.description,
     }
@@ -56,10 +57,14 @@ export function EditTaskDialog({ task }: EditTaskFormDialogProps) {
   const onSubmit = (data: EditTaskSchema) => {
     const normalizedDate = new Date(data.deadline)
 
+    const participants = (data.participantIds ?? [])
+      .map((id) => MOCK_USERS.find((user) => user.id === id))
+      .filter((user) => !!user)
+
     updateTask(task.id, {
       title: data.title,
       description: data.description,
-      owner: data.owner,
+      participants,
       deadline: normalizedDate,
     })
 
@@ -93,15 +98,6 @@ export function EditTaskDialog({ task }: EditTaskFormDialogProps) {
           </div>
 
           <div className="grid gap-2">
-            <label htmlFor="owner" className="text-sm font-medium">Responsável</label>
-            <div className="relative">
-              <User className="absolute left-4 top-4 size-4 text-muted-foreground" />
-              <Input id="owner" className="pl-9" {...register("owner")} placeholder="Nome do Dev" />
-            </div>
-            {errors.owner && <span className="text-xs text-destructive">{errors.owner.message}</span>}
-          </div>
-
-          <div className="grid gap-2">
             <label htmlFor="deadline" className="text-sm font-medium">Prazo</label>
             <div className="relative">
               <CalendarIcon className="absolute left-4 top-4 size-4 text-muted-foreground" />
@@ -119,6 +115,25 @@ export function EditTaskDialog({ task }: EditTaskFormDialogProps) {
               {...register("description")}
             />
             {errors.description && <span className="text-xs text-destructive">{errors.description.message}</span>}
+          </div>
+
+          <div className="grid gap-2">
+            <label htmlFor="participants" className="text-sm font-medium">Participantes</label>
+            <select
+              id="participants"
+              multiple
+              className="flex min-h-24 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              {...register("participantIds")}
+            >
+              {MOCK_USERS.map((user) => (
+                <option key={user.id} value={user.id}>
+                  {user.name} · {user.squard}
+                </option>
+              ))}
+            </select>
+            <span className="text-xs text-muted-foreground">
+              Segure Ctrl/Cmd para adicionar ou remover pessoas
+            </span>
           </div>
 
           <DialogFooter>

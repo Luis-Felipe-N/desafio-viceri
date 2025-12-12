@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { PlusCircle, Calendar as CalendarIcon, User } from "lucide-react"
+import { PlusCircle, Calendar as CalendarIcon } from "lucide-react"
 import {
   Dialog,
   DialogClose,
@@ -19,6 +19,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { MOCK_USERS } from "@/utils/mock-user"
+import { useAuth } from "@/context/auth-content"
 
 const createTaskSchema = z.object({
   title: z.string().min(3, "O título deve ter pelo menos 3 caracteres"),
@@ -33,23 +34,36 @@ type CreateTaskFormData = z.infer<typeof createTaskSchema>
 
 export function CreateTaskDialog() {
   const { createTask } = useTasks()
+  const { user: owner } = useAuth()
   const [open, setOpen] = useState(false)
+  const isDisabled = !owner
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm<CreateTaskFormData>(
-    { resolver: zodResolver(createTaskSchema) }
+    {
+      resolver: zodResolver(createTaskSchema),
+      defaultValues: {
+        participantIds: [],
+      },
+    }
   )
 
   const handleCreateTask = (data: CreateTaskFormData) => {
+    if (!owner) return
+
     const deadline = new Date(data.deadline)
+
+    const participants = (data.participantIds ?? [])
+      .map((id) => MOCK_USERS.find((user) => user.id === id))
+      .filter((user) => !!user)
 
     createTask({
       title: data.title,
       description: data.description,
-      participants: [MOCK_USERS[0]],
-      owner: MOCK_USERS[0],
+      participants,
+      owner,
       createdAt: new Date(),
       deadline,
-      status: "INICIADA" as TaskStatus,
+      status: "started" as TaskStatus,
     })
 
     reset()
@@ -60,7 +74,10 @@ export function CreateTaskDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="gap-2 bg-viceri-orange hover:bg-viceri-orange/80 font-bold ">
+        <Button
+          className="gap-2 bg-viceri-orange hover:bg-viceri-orange/80 font-bold "
+          disabled={isDisabled}
+        >
           <PlusCircle className="size-4" />
           Nova Tarefa
         </Button>
@@ -104,6 +121,27 @@ export function CreateTaskDialog() {
             {errors.deadline && (
               <span className="text-xs text-destructive">{errors.deadline.message}</span>
             )}
+          </div>
+
+          <div className="grid gap-2">
+            <label htmlFor="participants" className="text-sm font-medium">
+              Equipe
+            </label>
+            <select
+              id="participants"
+              multiple
+              className="flex min-h-24 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              {...register("participantIds")}
+            >
+              {MOCK_USERS.map((user) => (
+                <option key={user.id} value={user.id}>
+                  {user.name} · {user.squard}
+                </option>
+              ))}
+            </select>
+            <span className="text-xs text-muted-foreground">
+              Segure Ctrl/Cmd para selecionar múltiplos nomes
+            </span>
           </div>
 
           <div className="grid gap-2">

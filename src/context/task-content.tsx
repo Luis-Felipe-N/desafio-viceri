@@ -2,12 +2,18 @@ import { createContext, useContext, useState, useEffect, type ReactNode } from '
 import { MOCK_TASKS } from '@/utils/mock-data'
 import type { Task, TaskStatus } from '@/types/task'
 
-type SerializedTask = Omit<Task, 'deadline'> & { deadline: string | Date }
+const STORAGE_KEY = 'viceri-tasks'
+
+type SerializedTask = Omit<Task, 'deadline' | 'createdAt'> & {
+  deadline: string | Date
+  createdAt: string | Date
+}
 
 const reviveTasks = (tasks: SerializedTask[]): Task[] =>
   tasks.map((task) => ({
     ...task,
     deadline: new Date(task.deadline),
+    createdAt: new Date(task.createdAt),
   }))
 
 const getInitialTasks = (): Task[] => {
@@ -15,7 +21,7 @@ const getInitialTasks = (): Task[] => {
     return reviveTasks(MOCK_TASKS as SerializedTask[])
   }
 
-  const stored = window.localStorage.getItem('viceri-tasks')
+  const stored = window.localStorage.getItem(STORAGE_KEY)
   if (!stored) {
     return reviveTasks(MOCK_TASKS as SerializedTask[])
   }
@@ -45,7 +51,7 @@ export function TaskProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      window.localStorage.setItem('viceri-tasks', JSON.stringify(tasks))
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks))
     }
   }, [tasks])
 
@@ -53,6 +59,7 @@ export function TaskProvider({ children }: { children: ReactNode }) {
     const newTask: Task = {
       ...newTaskData,
       id: crypto.randomUUID(),
+      createdAt: newTaskData.createdAt ?? new Date(),
     }
     setTasks((prev) => [newTask, ...prev])
   }

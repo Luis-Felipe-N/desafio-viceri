@@ -1,10 +1,14 @@
+import { DndContext, type DragEndEvent, DragOverlay, useSensor, useSensors, PointerSensor, TouchSensor } from "@dnd-kit/core"
+import { useSearch } from "@tanstack/react-router"
 import { Badge } from "../ui/badge"
 import { TaskList } from "./task-list"
 import { useTasks } from "@/context/task-content"
-import { useSearch } from "@tanstack/react-router"
+
+import type { TaskStatus } from "@/types/task"
+import { DroppableColumn } from "./droppable/droppable-column"
 
 export function TaskColumn() {
-  const { tasks } = useTasks()
+  const { tasks, moveTask } = useTasks()
 
   const { query, filter } = useSearch({ from: '/tasks' })
   const filteredTasks = tasks.filter((task) => {
@@ -22,13 +26,13 @@ export function TaskColumn() {
     if (filter && filter !== 'all') {
       if (filter === 'overdue') {
         console.log('Checking overdue for task:', task)
-        const isOverdue = new Date(task.deadline) < new Date() && task.status !== 'CONCLUIDA'
+        const isOverdue = new Date(task.deadline) < new Date() && task.status !== 'started'
         if (!isOverdue) return false
       } else {
         const statusMap: Record<string, string> = {
-          started: 'INICIADA',
-          finished: 'CONCLUIDA',
-          blocked: 'BLOQUEADA'
+          started: 'started',
+          finished: 'finished',
+          bloqued: 'bloqued'
         }
         if (task.status !== statusMap[filter]) return false
       }
@@ -36,54 +40,80 @@ export function TaskColumn() {
 
     return true
   })
+  console.log('Filtered tasks:', tasks)
 
   const columns = [
     {
-      title: 'Iniciada',
-      color: 'esmerald',
-      accent: 'from-emerald-200/70 via-emerald-100 to-transparent',
-      status: 'progress',
-      tasks: filteredTasks.filter(task => task.status === 'INICIADA'),
+      title: 'Iniciadas',
+      accent: 'from-sky-200/70 via-sky-100 to-transparent',
+      color: 'sky',
+      status: 'started',
+      tasks: filteredTasks.filter(task => task.status === 'started'),
     },
     {
       title: 'Concluídas',
-      color: 'sky',
-      accent: 'from-sky-200/70 via-sky-100 to-transparent',
-      status: 'done',
-      tasks: filteredTasks.filter(task => task.status === 'CONCLUIDA'),
+      accent: 'from-emerald-200/70 via-emerald-100 to-transparent',
+      color: 'esmerald',
+      status: 'finished',
+      tasks: filteredTasks.filter(task => task.status === 'finished'),
     },
     {
       title: 'Bloqeueadas',
       color: 'red',
       accent: 'from-red-200/60 via-red-100 to-transparent',
-      status: 'done',
-      tasks: filteredTasks.filter(task => task.status === 'BLOQUEADA'),
+      status: 'bloqued',
+      tasks: filteredTasks.filter(task => task.status === 'bloqued'),
     },
   ]
 
-  return (
-    <section className="grid gap-5 xl:grid-cols-3">
-      {columns.map((column) => (
-        <article
-          key={column.title}
-          className="border-border/60 text-card-foreground relative flex h-full flex-col"
-        >
-          <div className={`bg-linear-to-br ${column.accent} absolute inset-x-4 top-4 h-16 rounded-2xl blur-3xl`} />
-          <header className="relative flex items-center justify-between  rounded-2xl p-4 bg-card">
-            <div className="flex items-center gap-3">
-              <p className="text-sm font-semibold text-viceri-blue">{column.title}</p>
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: { distance: 8 },
+    }),
+    useSensor(TouchSensor)
+  )
 
-              <Badge
-                className="h-5 min-w-5 rounded-full px-1 font-mono tabular-nums leading-5 bg-viceri-blue"
-                variant="default"
-              >
-                {column.tasks.length}
-              </Badge>
-            </div>
-          </header>
-          <TaskList tasks={column.tasks} />
-        </article>
-      ))}
-    </section>
+  function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event
+
+    if (!over) return
+
+    const taskId = active.id as string
+    const newStatus = over.id as TaskStatus
+
+    console.log('Dragged task:', taskId, 'to status:', newStatus)
+
+    const currentTask = tasks.find(t => t.id === taskId)
+    if (currentTask && currentTask.status !== newStatus) {
+      moveTask(taskId, newStatus)
+    }
+  }
+  return (
+    <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
+      <section className="grid xl:grid-cols-3">
+        {columns.map((column) => (
+          <DroppableColumn
+            key={column.status}
+            status={column.status}
+            className="border-border/60 text-card-foreground relative flex h-full flex-col"
+          >
+            <div className={`bg-linear-to-br ${column.accent} absolute inset-x-4 top-4 h-16 rounded-2xl blur-3xl`} />
+            <header className="relative flex items-center justify-between  rounded-2xl p-4 bg-card">
+              <div className="flex items-center gap-3">
+                <p className="text-sm font-semibold text-viceri-blue">{column.title}</p>
+
+                <Badge
+                  className="h-5 min-w-5 rounded-full px-1 font-mono tabular-nums leading-5 bg-viceri-blue"
+                  variant="default"
+                >
+                  {column.tasks.length}
+                </Badge>
+              </div>
+            </header>
+            <TaskList tasks={column.tasks} />
+          </DroppableColumn>
+        ))}
+      </section>
+    </DndContext>
   )
 }

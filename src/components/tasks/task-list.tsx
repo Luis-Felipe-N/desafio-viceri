@@ -1,18 +1,19 @@
 import type { Task } from "@/types/task"
 import { TaskCard } from "./task-card"
 import { useAutoAnimate } from '@formkit/auto-animate/react'
+import { DraggableCard } from "./droppable/draggable-card"
 
 interface TaskListProps {
   tasks: Task[]
 }
 
 export function TaskList({ tasks }: TaskListProps) {
-  const [parent, enableAnimations] = useAutoAnimate()
+  const [animationParent] = useAutoAnimate()
 
   return (
-    <div className="relative mt-4 space-y-4" ref={parent}>
+    <div className="relative mt-4 space-y-4" ref={animationParent}>
       {tasks.map((task) => (
-        <TaskCard key={task.id} task={task} />
+        <DraggableCard key={task.id} task={task} />
       ))}
     </div>
   )

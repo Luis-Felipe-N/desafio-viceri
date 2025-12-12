@@ -1,6 +1,6 @@
 import type { User } from "./user"
 
-export type TaskStatus = 'INICIADA' | 'BLOQUEADA' | 'CONCLUIDA'
+export type TaskStatus = 'started' | 'bloqued' | 'finished'
 
 export type Task = {
   id: string

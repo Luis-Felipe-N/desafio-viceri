@@ -18,9 +18,9 @@ export function TaskFilter() {
   const filterOptions: Array<{ label: string; mode: FilterMode }> = [
     { label: 'Todas', mode: 'all' },
     { label: 'Atrasadas', mode: 'overdue' },
-    { label: 'Iniciadas', mode: 'started' },
+    { label: 'Starteds', mode: 'started' },
     { label: 'Concluídas', mode: 'finished' },
-    { label: 'Bloqueadas', mode: 'blocked' },
+    { label: 'Bloqueadas', mode: 'bloqued' },
   ]
 
   let timeOutSearch: any;

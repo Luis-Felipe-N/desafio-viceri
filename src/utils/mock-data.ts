@@ -20,7 +20,7 @@ export const MOCK_TASKS: Task[] = [
     createdAt: getRelativeDate(-5),
     description: 'Fechar alinhamentos com diretoria e stakeholders chave.',
     deadline: getRelativeDate(2),
-    status: 'INICIADA',
+    status: 'started',
   },
   {
     id: 't-02',
@@ -30,7 +30,7 @@ export const MOCK_TASKS: Task[] = [
     createdAt: getRelativeDate(-10),
     description: 'Base do projeto com Vite, Tailwind e padrões compartilhados.',
     deadline: getRelativeDate(-1),
-    status: 'CONCLUIDA',
+    status: 'finished',
   },
   {
     id: 't-03',
@@ -40,7 +40,7 @@ export const MOCK_TASKS: Task[] = [
     createdAt: getRelativeDate(-3),
     description: 'Criar camada de estado global para tasks e filtros.',
     deadline: getRelativeDate(1),
-    status: 'INICIADA',
+    status: 'started',
   },
   {
     id: 't-04',
@@ -50,7 +50,7 @@ export const MOCK_TASKS: Task[] = [
     createdAt: getRelativeDate(-7),
     description: 'Rota de conciliação aguardando credenciais da financeira.',
     deadline: getRelativeDate(5),
-    status: 'BLOQUEADA',
+    status: 'bloqued',
   },
   {
     id: 't-05',
@@ -60,6 +60,6 @@ export const MOCK_TASKS: Task[] = [
     createdAt: getRelativeDate(-2),
     description: 'Mapear casos de falha para fluxos prioritários.',
     deadline: getRelativeDate(3),
-    status: 'INICIADA',
+    status: 'started',
   },
 ]

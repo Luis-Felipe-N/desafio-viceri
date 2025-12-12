@@ -18,8 +18,6 @@ export function TaskCard({ task }: TaskCardProps) {
   const formattedDeadline = deadlineFormatter.format(task.deadline)
   const participants = [task.owner, ...(task.participants || [])]
 
-  console.log("TaskCard", task)
-
   return (
     <div className="rounded-2xl p-4 bg-card">
       <div className="flex items-start justify-between gap-4">
