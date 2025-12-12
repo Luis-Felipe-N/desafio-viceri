@@ -17,7 +17,7 @@ export function AppNavbar() {
   const displayEmail = user?.email ?? 'anonimo@viceri.com'
 
   return (
-    <header className="md:px-6 mx-auto py-4 max-w-7xl">
+    <header className="md:px-6 ps-3 mx-auto py-4 max-w-7xl">
       <div className="flex items-center justify-between gap-4">
         <img src="https://viceri.com.br/wp-content/uploads/2022/06/viceri-seidor-logo.svg" alt="Logo" width={170} />
 
