@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useForm } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { Calendar as CalendarIcon, Pencil } from "lucide-react"
@@ -16,9 +16,11 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
 import { useTasks } from "@/context/task-content"
 import type { Task } from "@/types/task"
 import { MOCK_USERS } from "@/utils/mock-user"
+import { ParticipantsAutocomplete } from "@/components/feature/participants-autocomplete"
 
 const editTaskSchema = z.object({
   title: z.string().min(3, "O título deve ter pelo menos 3 caracteres"),
@@ -40,6 +42,7 @@ export function EditTaskDialog({ task }: EditTaskFormDialogProps) {
   const [open, setOpen] = useState(false)
 
   const {
+    control,
     register,
     handleSubmit,
     reset,
@@ -108,10 +111,10 @@ export function EditTaskDialog({ task }: EditTaskFormDialogProps) {
 
           <div className="grid gap-2">
             <label htmlFor="description" className="text-sm font-medium">Descrição</label>
-            <textarea
+            <Textarea
               id="description"
-              className="flex min-h-20 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
               placeholder="Detalhes..."
+              className="min-h-24"
               {...register("description")}
             />
             {errors.description && <span className="text-xs text-destructive">{errors.description.message}</span>}
@@ -119,21 +122,17 @@ export function EditTaskDialog({ task }: EditTaskFormDialogProps) {
 
           <div className="grid gap-2">
             <label htmlFor="participants" className="text-sm font-medium">Participantes</label>
-            <select
-              id="participants"
-              multiple
-              className="flex min-h-24 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-              {...register("participantIds")}
-            >
-              {MOCK_USERS.map((user) => (
-                <option key={user.id} value={user.id}>
-                  {user.name} · {user.squard}
-                </option>
-              ))}
-            </select>
-            <span className="text-xs text-muted-foreground">
-              Segure Ctrl/Cmd para adicionar ou remover pessoas
-            </span>
+            <Controller
+              control={control}
+              name="participantIds"
+              render={({ field }) => (
+                <ParticipantsAutocomplete
+                  inputId="participants"
+                  value={field.value ?? []}
+                  onChange={field.onChange}
+                />
+              )}
+            />
           </div>
 
           <DialogFooter>

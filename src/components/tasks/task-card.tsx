@@ -23,7 +23,7 @@ export function TaskCard({ task }: TaskCardProps) {
       <div className="flex items-start justify-between gap-4">
         <div className="w-full">
           <div className="flex items-center justify-between">
-            <Badge className="bg-viceri-blue">{task.owner.squard}</Badge>
+            <Badge className="bg-viceri-blue">{task.owner.squad}</Badge>
             <div className="flex items-center gap-2">
               <EditTaskDialog task={task} />
               <DeleteTaskDialog id={task.id} />

@@ -12,14 +12,16 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
 import { useTasks } from "@/context/task-content"
 import type { TaskStatus } from "@/types/task"
 
-import { useForm } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { MOCK_USERS } from "@/utils/mock-user"
 import { useAuth } from "@/context/auth-content"
+import { ParticipantsAutocomplete } from "@/components/feature/participants-autocomplete"
 
 const createTaskSchema = z.object({
   title: z.string().min(3, "O título deve ter pelo menos 3 caracteres"),
@@ -38,7 +40,7 @@ export function CreateTaskDialog() {
   const [open, setOpen] = useState(false)
   const isDisabled = !owner
 
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<CreateTaskFormData>(
+  const { control, register, handleSubmit, reset, formState: { errors } } = useForm<CreateTaskFormData>(
     {
       resolver: zodResolver(createTaskSchema),
       defaultValues: {
@@ -83,10 +85,10 @@ export function CreateTaskDialog() {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px]  text-viceri-blue">
         <DialogHeader>
           <DialogTitle>Criar nova tarefa</DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="text-viceri-muted-blue">
             Preencha os detalhes da atividade para adicionar ao quadro.
           </DialogDescription>
         </DialogHeader>
@@ -127,31 +129,27 @@ export function CreateTaskDialog() {
             <label htmlFor="participants" className="text-sm font-medium">
               Equipe
             </label>
-            <select
-              id="participants"
-              multiple
-              className="flex min-h-24 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-              {...register("participantIds")}
-            >
-              {MOCK_USERS.map((user) => (
-                <option key={user.id} value={user.id}>
-                  {user.name} · {user.squard}
-                </option>
-              ))}
-            </select>
-            <span className="text-xs text-muted-foreground">
-              Segure Ctrl/Cmd para selecionar múltiplos nomes
-            </span>
+            <Controller
+              control={control}
+              name="participantIds"
+              render={({ field }) => (
+                <ParticipantsAutocomplete
+                  inputId="participants"
+                  value={field.value ?? []}
+                  onChange={field.onChange}
+                />
+              )}
+            />
           </div>
 
           <div className="grid gap-2">
             <label htmlFor="description" className="text-sm font-medium">
               Descrição
             </label>
-            <textarea
+            <Textarea
               id="description"
-              className="flex min-h-20 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
               placeholder="Detalhes técnicos da tarefa..."
+              className="min-h-24"
               {...register("description")}
             />
             {errors.description && (

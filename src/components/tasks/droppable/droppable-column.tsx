@@ -12,8 +12,6 @@ export function DroppableColumn({ status, children, className }: DroppableColumn
     id: status,
   })
 
-  console.log({ isOver })
-
   return (
     <article
       ref={setNodeRef}

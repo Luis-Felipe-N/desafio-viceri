@@ -1,6 +1,6 @@
 import { Link, useRouterState } from '@tanstack/react-router'
 import type { LucideIcon } from 'lucide-react'
-import { Check, Home } from 'lucide-react'
+import { Check } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 
@@ -17,14 +17,9 @@ type NavItem = {
 
 const navigation: NavItem[] = [
   {
-    title: 'Dashboard',
-    icon: Home,
-    to: '/',
-  },
-  {
     title: 'Tasks',
     icon: Check,
-    to: '/tasks',
+    to: '/',
   },
 ]
 

@@ -10,7 +10,7 @@ import { DroppableColumn } from "./droppable/droppable-column"
 export function TaskColumn() {
   const { tasks, moveTask } = useTasks()
 
-  const { query, filter } = useSearch({ from: '/tasks' })
+  const { query, filter } = useSearch({ from: '/' })
   const filteredTasks = tasks.filter((task) => {
 
     if (query) {
@@ -25,8 +25,7 @@ export function TaskColumn() {
 
     if (filter && filter !== 'all') {
       if (filter === 'overdue') {
-        console.log('Checking overdue for task:', task)
-        const isOverdue = new Date(task.deadline) < new Date() && task.status !== 'started'
+        const isOverdue = new Date(task.deadline) < new Date() && task.status === 'started'
         if (!isOverdue) return false
       } else {
         const statusMap: Record<string, string> = {
@@ -40,7 +39,6 @@ export function TaskColumn() {
 
     return true
   })
-  console.log('Filtered tasks:', tasks)
 
   const columns = [
     {
@@ -80,8 +78,6 @@ export function TaskColumn() {
 
     const taskId = active.id as string
     const newStatus = over.id as TaskStatus
-
-    console.log('Dragged task:', taskId, 'to status:', newStatus)
 
     const currentTask = tasks.find(t => t.id === taskId)
     if (currentTask && currentTask.status !== newStatus) {

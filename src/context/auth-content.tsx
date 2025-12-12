@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useState } from "react"
 interface AuthContextType {
   user: User | null
   isAuthenticated: boolean
-  login: (name: string, squard: string) => void
+  login: (name: string, squad: string) => void
   logout: () => void
 }
 
@@ -21,12 +21,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, [])
 
-  const login = (name: string, squard: string) => {
+  const login = (name: string, squad: string) => {
     const createdUser: User = {
       id: crypto.randomUUID(),
       name,
       email: `${name.toLowerCase().replace(/\s+/g, '.')}@viceri.com`,
-      squard: squard as User['squard'],
+      squad: squad as User['squad'],
       imageUrl: `https://api.dicebear.com/7.x/initials/svg?seed=${name}`,
     }
 

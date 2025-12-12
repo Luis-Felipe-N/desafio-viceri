@@ -4,6 +4,6 @@ export interface User {
   id: string
   name: string
   email: string
-  squard: Squard
+  squad: Squard
   imageUrl?: string
 }

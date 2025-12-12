@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Search, X } from 'lucide-react'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
@@ -6,19 +6,15 @@ import { useNavigate, useSearch } from '@tanstack/react-router'
 import { cn } from '@/lib/utils'
 
 export function TaskFilter() {
-  const navigate = useNavigate({ from: '/tasks' })
-  const searchParams = useSearch({ from: '/tasks' }) as { query?: string; filter?: FilterMode }
+  const navigate = useNavigate({ from: '/' })
+  const searchParams = useSearch({ from: '/' }) as { query?: string; filter?: FilterMode }
 
   const [localSearch, setLocalSearch] = useState(searchParams.query || '')
-
-  useEffect(() => {
-    setLocalSearch(searchParams.query || '')
-  }, [searchParams.query])
 
   const filterOptions: Array<{ label: string; mode: FilterMode }> = [
     { label: 'Todas', mode: 'all' },
     { label: 'Atrasadas', mode: 'overdue' },
-    { label: 'Starteds', mode: 'started' },
+    { label: 'Iniciadas', mode: 'started' },
     { label: 'Concluídas', mode: 'finished' },
     { label: 'Bloqueadas', mode: 'bloqued' },
   ]
@@ -60,7 +56,7 @@ export function TaskFilter() {
           <Input
             placeholder="Pesquisar por título, descrição ou responsável..."
             className={cn(
-              "pl-9 pr-9 bg-viceri-blue/30 backdrop-blur-lg text-white font-bold placeholder:text-white border-white/40 shadow-none",
+              "pl-9 pr-9 bg-slate-400/30 backdrop-blur-lg text-white font-semibold placeholder:text-white/80 border-white/40 shadow-none",
               "focus-visible:border-white/40 focus-visible:ring-white/20 focus-visible:ring-[3px]",
             )}
             value={localSearch}
@@ -90,7 +86,7 @@ export function TaskFilter() {
                   "cursor-pointer relative h-8 font-bold text-white",
                   isActive
                     ? 'bg-viceri-orange'
-                    : 'bg-viceri-blue/30 backdrop-blur-lg border-white/40 hover:text-white hover:bg-viceri-blue/40 hover:border-white/60',
+                    : 'bg-slate-400/40 backdrop-blur-lg border-white/40 hover:text-white hover:bg-viceri-blue/40 hover:border-white/60',
                 )}
                 onClick={() => handleFilterChange(option.mode)}
               >

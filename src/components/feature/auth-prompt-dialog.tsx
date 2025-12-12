@@ -5,12 +5,12 @@ import { Button } from "@/components/ui/button"
 import type { User } from "@/types/user"
 import { useAuth } from "@/context/auth-content"
 
-const SQUADS: User['squard'][] = ["Frontend", "Backend", "Fullstack", "Design", "QA"]
+const SQUADS: User['squad'][] = ["Frontend", "Backend", "Fullstack", "Design", "QA"]
 
 export function AuthPromptDialog() {
   const { login } = useAuth()
   const [name, setName] = useState("")
-  const [squad, setSquad] = useState<User['squard'] | "">("")
+  const [squad, setSquad] = useState<User['squad'] | "">("")
 
   const disableSubmit = name.trim().length < 2 || !squad
 
@@ -58,8 +58,8 @@ export function AuthPromptDialog() {
             <select
               id="auth-squad"
               value={squad}
-              onChange={(event) => setSquad(event.target.value as User['squard'])}
-              className="flex h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              onChange={(event) => setSquad(event.target.value as User['squad'])}
+              className="flex h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground shadow-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
             >
               <option value="" hidden>
                 Escolha o squad
